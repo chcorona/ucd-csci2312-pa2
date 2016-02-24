@@ -15,7 +15,8 @@ namespace Clustering {
 
     };
 
-    class Cluster {
+    class Cluster
+    {
 
         int __size;
         LNodePtr __points;
