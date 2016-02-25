@@ -7,55 +7,121 @@
 
 namespace Clustering
 {
+    Point::Point(int)
+    {
 
+    };
+    Point::Point(int , double *)
+    {
+
+    };
+    // Big three: cpy ctor, overloaded operator=, dtor
+    Point::Point(const Point &)
+    {
+
+    };
+    Point &operator=(const Point &)
+    {
+
+    };
+    Point::~Point()
+    {
+
+    };
+    // Accessors & mutators
+    int Point:: getId() const
+    {
+        return 0;
+    };
+    int Point::getDims() const
+    {
+        return 0;
+    };
+    void Point::setValue(int, double)
+    {
+
+    };
+    double Point::getValue(int) const
+    {
+        return 0;
+    };
+    // Functions
+    double Point::distanceTo(const Point &) const
+    {
+        return 0;
+    };
+    // Overloaded operators
+    // Members
+    Point & Point::operator*=(double)
+    // p *= 6; p.operator*=(6);
+    {
+
+    };
+    Point & Point::operator/=(double)
+    {
+
+    };
+    const Point Point::operator*(double) const
+    // prevent (p1 * 2) = p2;
+    {
+
+    };
+    const Point Point::operator/(double) const
+    // p3 = p2 / 2;
+    {
+
+    };
+    double &Point::operator[](int index)
+    {
+
+    };
+    // Friends
+    Point &operator+=(Point &, const Point &)
+    {
+
+    };
+    Point &operator-=(Point &, const Point &)
+    {
+
+    };
+    const Point operator+(const Point &, const Point &)
+    {
+
+    };
+    const Point operator-(const Point &, const Point &)
+    {
+
+    };
+    bool operator==(const Point &, const Point &)
+    {
+
+    };
+    bool operator!=(const Point &, const Point &)
+    {
+
+    };
+    bool operator<(const Point &, const Point &)
+    {
+
+    };
+    bool operator>(const Point &, const Point &)
+    {
+
+    };
+    bool operator<=(const Point &, const Point &)
+    {
+
+    };
+    bool operator>=(const Point &, const Point &)
+    {
+
+    };
+    std::ostream &operator<<(std::ostream &, const Point &)
+    {
+
+    };
+    std::istream &operator>>(std::istream &, Point &)
+    {
+
+    };
 };
-/*
-         Point(int);
-        Point(int, double *);
-
-        // Big three: cpy ctor, overloaded operator=, dtor
-        Point(const Point &);
-        Point &operator=(const Point &);
-        ~Point();
-
-        // Accessors & mutators
-        int getId() const;
-        int getDims() const;
-        void setValue(int, double);
-        double getValue(int) const;
-
-        // Functions
-        double distanceTo(const Point &) const;
-
-        // Overloaded operators
-
-        // Members
-        Point &operator*=(double); // p *= 6; p.operator*=(6);
-        Point &operator/=(double);
-        const Point operator*(double) const; // prevent (p1 * 2) = p2;
-        const Point operator/(double) const; // p3 = p2 / 2;
-
-        double &operator[](int index);
-
-        // Friends
-        friend Point &operator+=(Point &, const Point &);
-        friend Point &operator-=(Point &, const Point &);
-        friend const Point operator+(const Point &, const Point &);
-        friend const Point operator-(const Point &, const Point &);
-
-        friend bool operator==(const Point &, const Point &);
-        friend bool operator!=(const Point &, const Point &);
-
-        friend bool operator<(const Point &, const Point &);
-        friend bool operator>(const Point &, const Point &);
-        friend bool operator<=(const Point &, const Point &);
-        friend bool operator>=(const Point &, const Point &);
-
-        friend std::ostream &operator<<(std::ostream &, const Point &);
-        friend std::istream &operator>>(std::istream &, Point &);
-
-
-
-
-
- */
