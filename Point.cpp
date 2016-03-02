@@ -16,13 +16,13 @@ namespace Clustering
         __values = new double[dimension];
         __dim = dimension;
 
-        for (int i = 0; i < dimension; ++i)__values[i]=0.0;
+        for (int i = 0; i < dimension; ++i)__values[i] = 0.0;
 
     }
-    Point::Point(int dimension, double * dimValues)
+    Point::Point(int dimension, double * dValues)
     {
         __id = __idGen++;
-        __values = dimValues;
+        __values = dValues;
         __dim = dimension;
     }
     // Big three: cpy ctor, overloaded operator=, dtor
@@ -32,16 +32,17 @@ namespace Clustering
         __dim = point.getDims();
         __values = new double[__dim];
 
-        for(int i=0;i<__dim;++i)__values[i]=point.__values[i];
+        for(int i = 0; i < __dim; ++i)
+            __values[i] = point.__values[i];
     }
-    Point &Point::operator=(const Point &pointE)
+    Point& Point::operator=(const Point & point)
     {
-        if(this != &pointE)
+        if(this != &point)
         {
-            __id = pointE.__id;
-            delete[]__values;
-            __values = pointE.__values;
-            __dim = pointE.getDims();
+            __id = point.__id;
+            delete[] __values;
+            __values = point.__values;
+            __dim = point.getDims();
         }
         return *this;
     }
@@ -56,11 +57,11 @@ namespace Clustering
 
     void Point::setValue(int dimension, double dimValues) {__values[dimension] = dimValues;}
 
-    double Point::getValue(int dimValues) const
+    double Point::getValue(int dimension) const
     {
-        if (dimValues <= getDims())
+        if (dimension <= getDims())
         {
-            return __values[dimValues];
+            return __values[dimension];
         }
         else
         {
@@ -68,12 +69,12 @@ namespace Clustering
         }
     }
     // Functions
-    double Point::distanceTo(const Point &point) const
+    double Point::distanceTo(const Point & point) const
     {
-       double distance =0.0;
-        for(int i =0;i<__dim; ++i)
+       double distance = 0.0;
+        for(int i = 0; i < __dim; ++i)
         {
-            distance = distance +((__values[i]-point.getValue(i))*(__values[i]-point.getValue(i)));
+            distance = distance + ((__values[i] - point.getValue(i)) * (__values[i] - point.getValue(i)));
         }
 
         return sqrt(distance);
@@ -84,9 +85,9 @@ namespace Clustering
     {
         Point *newP = new Point(__dim);
 
-        for (int i=0;i<__dim;++i)
+        for (int i = 0; i <__dim; ++i)
         {
-            newP->__values[i] = __values[i] *m;
+            newP->__values[i] = __values[i] * m;
         }
         return *newP;
 
@@ -97,9 +98,9 @@ namespace Clustering
 
         Point *newP = new Point(__dim);
 
-        for (int i=0;i<__dim;++i)
+        for (int i = 0; i < __dim; ++i)
         {
-            newP->__values[i] = __values[i] /d;
+            newP->__values[i] = __values[i] / d;
         }
         return *newP;
 
@@ -129,11 +130,11 @@ namespace Clustering
         return pass;
     }
 
-    bool operator!=(const Point &point1, const Point &point2)
+    bool operator!=(const Point & point1, const Point & point2)
     {
         return !(point1 == point2);
     }
-    bool operator<(const Point &point1, const Point &point2)
+    bool operator<(const Point & point1, const Point & point2)
     {
         if (point1.__dim < point2.__dim)
         {
@@ -143,7 +144,7 @@ namespace Clustering
         {
             return false;
         }
-        for (int i=0; i < point1.getDims();++i)
+        for (int i = 0; i < point1.getDims(); ++i)
         {
             if(point1.__values[i] < point2.__values[i])
             {
@@ -156,7 +157,7 @@ namespace Clustering
         }
         return false;
     }
-    bool operator>(const Point &point1, const Point &point2)
+    bool operator>(const Point & point1, const Point &point2)
     {
         if (point1.__dim > point2.__dim)
         {
@@ -166,7 +167,7 @@ namespace Clustering
         {
             return false;
         }
-        for (int i=0; i < point1.getDims();++i)
+        for (int i = 0; i < point1.getDims(); ++i)
         {
             if(point1.__values[i] > point2.__values[i])
             {
@@ -180,7 +181,7 @@ namespace Clustering
         return false;
 
     }
-    bool operator<=(const Point &point1, const Point &point2)
+    bool operator<=(const Point & point1, const Point & point2)
     {
         if(point1<point2)
         {
@@ -192,7 +193,7 @@ namespace Clustering
         }
         return true;
     }
-    bool operator>=(const Point &point1, const Point &point2)
+    bool operator>=(const Point & point1, const Point & point2)
     {
         if(point1>point2)
         {
@@ -205,25 +206,24 @@ namespace Clustering
         return true;
     }
     // Friends
-    Point &operator+=(Point &point1, const Point &point2)
+    Point& operator+=(Point & point1, const Point & point2)
     {
         Point *newP = new Point(point2);
 
-        for (int i =0; i<point1.__dim;++i)
+        for (int i = 0; i < point1.__dim; ++i)
         {
-            point1.__values[i] = point1.__values[i]+newP->getValue(i);
+            point1.__values[i] = point1.__values[i] + newP->getValue(i);
         }
         delete newP;
         return point1;
-
     }
-    Point &operator-=(Point &point1, const Point &point2)
+    Point &operator-=(Point & point1, const Point & point2)
     {
         Point *newP = new Point(point2);
 
-        for (int i =0; i<point1.__dim;++i)
+        for (int i = 0; i < point1.__dim; ++i)
         {
-            point1.__values[i] = point1.__values[i]-newP->getValue(i);
+            point1.__values[i] = point1.__values[i] - newP->getValue(i);
         }
         delete newP;
         return point1;
@@ -235,16 +235,16 @@ namespace Clustering
     Point & Point::operator*=(double m)
     // p *= 6; p.operator*=(6);
     {
-        for (int i=0;i<__dim;++i)
+        for (int i = 0; i <__dim; ++i)
         {
-            __values[i] *=m;
+            __values[i] *= m;
         }
         return *this;
     }
     Point & Point::operator/=(double d)
     {
 
-        for (int i=0;i<__dim;++i)
+        for (int i = 0; i < __dim; ++i)
         {
             __values[i] /= d;
         }
@@ -254,7 +254,7 @@ namespace Clustering
 
 
 
-    const Point operator+(const Point &point1, const Point &point2)
+    const Point operator+(const Point & point1, const Point & point2)
     {
         Point *newP = new Point(point1);
 
@@ -262,7 +262,7 @@ namespace Clustering
         return *newP;
 
     }
-    const Point operator-(const Point &point1, const Point &point2)
+    const Point operator-(const Point & point1, const Point & point2)
     {
         Point *newP = new Point(point1);
 
@@ -271,11 +271,8 @@ namespace Clustering
 
     }
 
-
-
-
-    std::ostream &operator<<(std::ostream &out, const Point &point)
-    {
+    std::ostream &operator<<(std::ostream &out, const Point &point1)
+    {/*
         int i =0;
         for(; i<point.getDims()-1;++i)
         {
@@ -283,11 +280,11 @@ namespace Clustering
             out <<", ";
         }
         out << point.getValue(i);
-        return out;
+        return out;*/
 
     }
     std::istream &operator>>(std::istream &in, Point &point)
-    {
+    {/*
         int index = 0;
         while ((in.peek() != '\n')||(in.peek() != '\r'))
         {
@@ -299,7 +296,7 @@ namespace Clustering
             in.ignore();
             index++;
         }
-        return in;
+        return in;*/
 
     }
  };
