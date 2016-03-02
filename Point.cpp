@@ -3,125 +3,303 @@
 //
 
 #include "Point.h"
-#include "Cluster.h"
+
+#include <cmath>
+
 
 namespace Clustering
 {
-    Point::Point(int)
-    {
+    unsigned int Point::__idGen = 0;
 
-    };
-    Point::Point(int , double *)
-    {
+    Point::Point(int dimension) {
+        __id = __idGen++;
+        __values = new double[dimension];
+        __dim = dimension;
 
-    };
+        for (int i = 0; i < dimension; ++i)__values[i]=0.0;
+
+    }
+    Point::Point(int dimension, double * dimValues)
+    {
+        __id = __idGen++;
+        __values = dimValues;
+        __dim = dimension;
+    }
     // Big three: cpy ctor, overloaded operator=, dtor
-    Point::Point(const Point &)
+    Point::Point(const Point & point)
     {
+        __id = point.__id;
+        __dim = point.getDims();
+        __values = new double[__dim];
 
-    };
-    Point &operator=(const Point &)
+        for(int i=0;i<__dim;++i)__values[i]=point.__values[i];
+    }
+    Point &Point::operator=(const Point &pointE)
     {
-
-    };
+        if(this != &pointE)
+        {
+            __id = pointE.__id;
+            delete[]__values;
+            __values = pointE.__values;
+            __dim = pointE.getDims();
+        }
+        return *this;
+    }
     Point::~Point()
     {
 
-    };
+    }
     // Accessors & mutators
-    int Point:: getId() const
-    {
-        return 0;
-    };
-    int Point::getDims() const
-    {
-        return 0;
-    };
-    void Point::setValue(int, double)
-    {
+    int Point:: getId() const {return __id;}
 
-    };
-    double Point::getValue(int) const
+    int Point::getDims() const {return __dim;}
+
+    void Point::setValue(int dimension, double dimValues) {__values[dimension] = dimValues;}
+
+    double Point::getValue(int dimValues) const
     {
-        return 0;
-    };
+        if (dimValues <= getDims())
+        {
+            return __values[dimValues];
+        }
+        else
+        {
+            return 0;
+        }
+    }
     // Functions
-    double Point::distanceTo(const Point &) const
+    double Point::distanceTo(const Point &point) const
     {
-        return 0;
-    };
-    // Overloaded operators
-    // Members
-    Point & Point::operator*=(double)
-    // p *= 6; p.operator*=(6);
-    {
+       double distance =0.0;
+        for(int i =0;i<__dim; ++i)
+        {
+            distance = distance +((__values[i]-point.getValue(i))*(__values[i]-point.getValue(i)));
+        }
 
-    };
-    Point & Point::operator/=(double)
-    {
+        return sqrt(distance);
+    }
 
-    };
-    const Point Point::operator*(double) const
+    const Point Point::operator*(double m) const
     // prevent (p1 * 2) = p2;
     {
+        Point *newP = new Point(__dim);
 
-    };
-    const Point Point::operator/(double) const
+        for (int i=0;i<__dim;++i)
+        {
+            newP->__values[i] = __values[i] *m;
+        }
+        return *newP;
+
+    }
+    const Point Point::operator/(double d) const
     // p3 = p2 / 2;
     {
 
-    };
-    double &Point::operator[](int index)
-    {
+        Point *newP = new Point(__dim);
 
-    };
+        for (int i=0;i<__dim;++i)
+        {
+            newP->__values[i] = __values[i] /d;
+        }
+        return *newP;
+
+    }
+
+    double &Point::operator[](int index) {return __values[index];}
+
+    bool operator==(const Point & point1, const Point & point2)
+    {
+        bool pass = true;
+
+        if (point1.__id != point2.__id)
+        {
+            return false;
+        }
+        if (point1.__dim != point2.__dim)
+        {
+            return false;
+        }
+        for (int i = 0; i < point1.getDims(); ++i)
+        {
+            if (point1.__values[i] != point2.__values[i])
+            {
+                pass = false;
+            }
+        }
+        return pass;
+    }
+
+    bool operator!=(const Point &point1, const Point &point2)
+    {
+        return !(point1 == point2);
+    }
+    bool operator<(const Point &point1, const Point &point2)
+    {
+        if (point1.__dim < point2.__dim)
+        {
+            return true;
+        }
+        if (point1.__dim > point2.__dim)
+        {
+            return false;
+        }
+        for (int i=0; i < point1.getDims();++i)
+        {
+            if(point1.__values[i] < point2.__values[i])
+            {
+                return true;
+            }
+            else if (point1.__values [i] > point2.__values[i])
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+    bool operator>(const Point &point1, const Point &point2)
+    {
+        if (point1.__dim > point2.__dim)
+        {
+            return true;
+        }
+        if (point1.__dim < point2.__dim)
+        {
+            return false;
+        }
+        for (int i=0; i < point1.getDims();++i)
+        {
+            if(point1.__values[i] > point2.__values[i])
+            {
+                return true;
+            }
+            else if (point1.__values [i] < point2.__values[i])
+            {
+                return false;
+            }
+        }
+        return false;
+
+    }
+    bool operator<=(const Point &point1, const Point &point2)
+    {
+        if(point1<point2)
+        {
+            return true;
+        }
+        if(point1>point2)
+        {
+            return false;
+        }
+        return true;
+    }
+    bool operator>=(const Point &point1, const Point &point2)
+    {
+        if(point1>point2)
+        {
+            return true;
+        }
+        if(point1<point2)
+        {
+            return false;
+        }
+        return true;
+    }
     // Friends
-    Point &operator+=(Point &, const Point &)
+    Point &operator+=(Point &point1, const Point &point2)
+    {
+        Point *newP = new Point(point2);
+
+        for (int i =0; i<point1.__dim;++i)
+        {
+            point1.__values[i] = point1.__values[i]+newP->getValue(i);
+        }
+        delete newP;
+        return point1;
+
+    }
+    Point &operator-=(Point &point1, const Point &point2)
+    {
+        Point *newP = new Point(point2);
+
+        for (int i =0; i<point1.__dim;++i)
+        {
+            point1.__values[i] = point1.__values[i]-newP->getValue(i);
+        }
+        delete newP;
+        return point1;
+    }
+
+
+    // Overloaded operators
+    // Members
+    Point & Point::operator*=(double m)
+    // p *= 6; p.operator*=(6);
+    {
+        for (int i=0;i<__dim;++i)
+        {
+            __values[i] *=m;
+        }
+        return *this;
+    }
+    Point & Point::operator/=(double d)
     {
 
-    };
-    Point &operator-=(Point &, const Point &)
-    {
+        for (int i=0;i<__dim;++i)
+        {
+            __values[i] /= d;
+        }
+        return *this;
 
-    };
-    const Point operator+(const Point &, const Point &)
-    {
+    }
 
-    };
-    const Point operator-(const Point &, const Point &)
-    {
 
-    };
-    bool operator==(const Point &, const Point &)
-    {
 
-    };
-    bool operator!=(const Point &, const Point &)
+    const Point operator+(const Point &point1, const Point &point2)
     {
+        Point *newP = new Point(point1);
 
-    };
-    bool operator<(const Point &, const Point &)
+        *newP += point2;
+        return *newP;
+
+    }
+    const Point operator-(const Point &point1, const Point &point2)
     {
+        Point *newP = new Point(point1);
 
-    };
-    bool operator>(const Point &, const Point &)
+        *newP -= point2;
+        return *newP;
+
+    }
+
+
+
+
+    std::ostream &operator<<(std::ostream &out, const Point &point)
     {
+        int i =0;
+        for(; i<point.getDims()-1;++i)
+        {
+            out<< point.getValue(i);
+            out <<", ";
+        }
+        out << point.getValue(i);
+        return out;
 
-    };
-    bool operator<=(const Point &, const Point &)
+    }
+    std::istream &operator>>(std::istream &in, Point &point)
     {
+        int index = 0;
+        while ((in.peek() != '\n')||(in.peek() != '\r'))
+        {
+            in >> point[index];
+            if((in.peek() == '\n')||(in.peek() != '\r')|| (in.eof()))
+            {
+                return in;
+            }
+            in.ignore();
+            index++;
+        }
+        return in;
 
-    };
-    bool operator>=(const Point &, const Point &)
-    {
-
-    };
-    std::ostream &operator<<(std::ostream &, const Point &)
-    {
-
-    };
-    std::istream &operator>>(std::istream &, Point &)
-    {
-
-    };
-};
+    }
+ };
