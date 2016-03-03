@@ -336,7 +336,6 @@ namespace Clustering
         delete cluster4;
         return *cluster3;
     }
-
     // Friends: IO
     std::ostream &operator<<(std::ostream &out, const Cluster &cluster1)
     {
