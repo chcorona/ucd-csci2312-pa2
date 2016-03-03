@@ -2,10 +2,9 @@
 // Created by Christopher Corona on 2/24/2016.
 //
 
-#include <algorithm>
 #include "Cluster.h"
 #include <sstream>
-#include <stdio.h>
+#include <iomanip>
 
 namespace Clustering
 {
@@ -37,18 +36,11 @@ namespace Clustering
     }
     Cluster::~Cluster()
     {
-        __del();
+
     }
 
     // Getters/setters
-    int Cluster::getSize() const
-    {
-        return __size;
-    }
-
-
-
-
+    int Cluster::getSize() const{return __size;}
 
     void Cluster:: __del()
     {
@@ -83,14 +75,6 @@ namespace Clustering
             }
         }
     }
-    bool Cluster::__in(const Point &p) const
-    {
-
-    }
-
-
-
-
 
     // Set functions: They allow calling c1.add(c2.remove(p));
     void Cluster::add(const Point & newPoint)
@@ -152,14 +136,6 @@ namespace Clustering
         ++__size;
     }
 
-
-
-
-
-
-
-
-
     const Point & Cluster::remove(const Point &removePoint)
     {
         LNodePtr temp = __points;
@@ -200,23 +176,6 @@ namespace Clustering
         return removePoint;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     bool Cluster::contains(const Point & point)
     {
         LNodePtr  temp;
@@ -240,20 +199,7 @@ namespace Clustering
         return false;
     }
 
-
-
-
-
-
-
-
-
-
-
-
     // Overloaded operators
-
-
     // Members: Subscript
     const Point &Cluster::operator[](unsigned int index) const // notice: const
     {
@@ -269,16 +215,6 @@ namespace Clustering
         }
         return temp->point;
     }
-
-
-
-
-
-
-
-
-
-
 
     // Friends: Comparison
     bool operator==(const Cluster &cluster1, const Cluster &cluster2)
@@ -297,24 +233,12 @@ namespace Clustering
         return true;
     }
 
-
-
-
-
-
-
     bool operator!=(const Cluster & cluster1, const Cluster & cluster2)
     {
         return !(cluster1 == cluster2);
     }
 
-
-
-
-
-
-
-    // Members: Compound assignment (Point argument)
+   // Members: Compound assignment (Point argument)
     Cluster & Cluster::operator+=(const Point & a)
     {
         this->add(a);
@@ -339,9 +263,6 @@ namespace Clustering
         return *this;
     }
 
-
-
-
     Cluster &Cluster::operator-=(const Cluster & s) // (asymmetric) difference
     {
         for(int i = 0; i < s.getSize(); ++i)
@@ -353,16 +274,6 @@ namespace Clustering
         }
         return *this;
     }
-
-
-
-
-
-
-
-
-
-
 
     // Friends: Arithmetic (Cluster and Point)
     const Cluster operator+(const Cluster &cluster1, const Point &point1)
@@ -393,15 +304,6 @@ namespace Clustering
 
     }
 
-
-
-
-
-
-
-
-
-
     // Friends: Arithmetic (two Clusters)
     const Cluster operator+(const Cluster &cluster1, const Cluster &cluster2) // union
     {
@@ -419,12 +321,6 @@ namespace Clustering
         return *cluster3;
     }
 
-
-
-
-
-
-
     const Cluster operator-(const Cluster &cluster1, const Cluster &cluster2) // (asymmetric) difference
     {
         Cluster *cluster3 = new Cluster(cluster1);
@@ -441,21 +337,33 @@ namespace Clustering
         return *cluster3;
     }
 
-
-
     // Friends: IO
     std::ostream &operator<<(std::ostream &out, const Cluster &cluster1)
     {
         LNodePtr temp = cluster1.__points;
-        for (int i = 0; i < cluster1.__size; ++i)
+        while(temp)
         {
-            out<<temp->point << std::endl;
-            temp = temp -> next;
+            out << temp ->point;
+            out << std::endl;
+            temp = temp->next;
         }
         return out;
     }
     std::istream &operator>>(std::istream &in, Cluster &cluster1)
     {
+        while(!in.eof())
+        {
+            Point p(1);
+            std::string str;
+            std::getline(in, str);
 
+            if(str.length()>0)
+            {
+                std::stringstream ss(str);
+                ss>>p;
+                cluster1.add(p);
+            }
+        }
+        return in;
     }
 }
